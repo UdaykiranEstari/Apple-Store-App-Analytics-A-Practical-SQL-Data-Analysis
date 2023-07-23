@@ -297,4 +297,26 @@ ORDER BY prime_genre, rating_count_tot DESC
 
 
 
+-- Price correaltion with user_rating
+-- gives the idea what price range is best to set
+
+SELECT CASE 
+	WHEN price < 5 THEN '< 5 $' 
+        WHEN price BETWEEN 05 AND 10 THEN '05-10 $'
+        WHEN price BETWEEN 11 AND 20 THEN '11-20 $'
+        WHEN price BETWEEN 21 AND 30 THEN '21-30 $'
+        WHEN price BETWEEN 31 AND 40 THEN '31-40 $'
+        WHEN price BETWEEN 41 AND 50 THEN '41-50 $'
+        WHEN price BETWEEN 51 AND 60 THEN '51-60 $'
+       ELSE '> 60 $' END AS PriceBucket,
+       Avg(user_rating) AS AvgRating       
+FROM AppleStore
+GROUP BY PriceBucket
+ORDER BY AvgRating DESC
+
+-- (31-40) or(50-60) $ is the best price range to set to get better reviews where your app is capable of that price
+
+
+
+
 -- End
