@@ -1,5 +1,5 @@
 
-# PRACTICAL Data Analytics with SQL
+# Practical Data Analytics with SQL
 
 ## **Introduction**
 
