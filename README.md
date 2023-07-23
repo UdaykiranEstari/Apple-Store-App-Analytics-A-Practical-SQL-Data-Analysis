@@ -199,7 +199,7 @@ WHERE  	b.app_desc LIKE '%Feature%'
 ```
 keywords could enhance app features and usage, leading to better user satisfaction and higher ratings.
 
-**6.Top Apps in Each Category **
+**6.Top Apps in Each Category**
 
 ```sql
 
