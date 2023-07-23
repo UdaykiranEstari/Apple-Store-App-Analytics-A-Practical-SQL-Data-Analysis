@@ -49,6 +49,8 @@ EDA played a crucial role in understanding the dataset's structure and quality. 
 
 In this phase, we gained valuable insights into the dataset, which provided a foundation for further analysis and decision-making.
 
+for more info check the sql file `AppStore_Analysis.sql`
+
 ### Step 3 : Data Analysis and Insights
 
 After completing the exploratory data analysis (EDA), we proceeded with the data analysis phase, where we derived valuable insights to guide our stakeholder's app development decisions. The following are the key insights we obtained:
@@ -102,15 +104,150 @@ On conducting the analysis, we found that, on average, paid apps received slight
 
 **2. Languages and Ratings**
 
+
+```sql
+
+-- Dividing languages into groups <10 , 10-30 , 31-50 , 51-100
+
+SELECT  CASE
+			WHEN lang_num < 10 THEN "< 10 Languages"
+            WHEN lang_num BETWEEN 10 AND 30 THEN "10-30 Languages" 
+            WHEN lang_num BETWEEN 31 AND 50 THEN "31-50 Languages"
+            WHEN lang_num BETWEEN 50 AND 100 THEN "50-100 Languages"
+            END as LangGroup,
+        AVG(user_rating) as AvgRating
+FROM AppleStore
+GROUP BY LangGroup
+ORDER BY AvgRating DESC
+
+-- Here 10-30 Language group has more ratings .. if we want more info let's go into little depth
+
+SELECT CASE
+			WHEN lang_num BETWEEN 10 AND 15 THEN "10-15 Languages"
+            WHEN lang_num BETWEEN 16 AND 20 THEN "16-20 Languages"
+            WHEN lang_num BETWEEN 21 AND 25 THEN "21-25 Languages"
+            WHEN lang_num BETWEEN 26 AND 30 THEN "26-30 Languages"
+       END AS LangGroup,
+       AVG(user_rating) as AvgRating
+FROM AppleStore
+GROUP BY LangGroup
+ORDER BY AvgRating DESC
+
+-- 10-15 Language support is enough is good.
+
+```
+
+
 Through our data analysis, we observed a positive correlation between the number of languages supported by an app and its user ratings. Apps that supported a moderate number of languages tended to have better average user ratings. This insight indicates that focusing on supporting the most relevant languages for the target audience can significantly improve user satisfaction and overall ratings.
 
 **3. Low-Rated Genres**
+
+```sql
+
+-- Check Genre with low rating
+
+SELECT prime_genre,
+		Avg(user_rating) as AvgRating
+FROM AppleStore
+GROUP BY prime_genre
+ORDER BY AvgRating
+LIMIT 5
+
+-- Catalogs, Finance and Book genre has very less reviews. Creating a better product in this genre gives high chance of success
+```
 
 Our analysis also identified genres with low ratings in the dataset. This finding presents an opportunity for our stakeholder to explore these genres further and potentially address user needs in those categories. By understanding the pain points and shortcomings of low-rated apps in these genres, our stakeholder can make strategic decisions to create high-quality apps that cater to user preferences, leading to the possibility of achieving higher ratings.
 
 **4. App Description Length**
 
+```sql
+
+-- Check if there is realation between app_description and user_rating
+
+SELECT  CASE
+			WHEN Length(b.app_desc) < 500 THEN "Short"
+            WHEN Length(b.app_desc) BETWEEN 500 AND 1000 THEN "Medium"
+            ELSE "Long"
+        END AS LangLenGroup,
+        Avg(user_rating) as Avg_Rating
+FROM AppleStore a
+JOIN appleStore_description_combined b
+ON a.id = b.id
+GROUP BY LangLenGroup
+ORDER BY Avg_Rating DESC
+
+```
 A notable insight from the analysis was the positive correlation between app description length and user ratings. Apps with longer and more comprehensive descriptions tended to receive better user ratings. This suggests that clear and detailed app descriptions can positively influence user perceptions and satisfaction. As a recommendation, we advised our stakeholder to focus on crafting clear and engaging app descriptions to enhance user ratings.
+
+**5. App Description Keywords**
+
+```sql
+
+-- Having keywords and their explain like Features, Usage, Hints, Tips will increase your rating 
+
+PRAGMA case_sensitive_like = true;
+
+SELECT avg(a.user_rating) as Avg_Rating
+FROM AppleStore a
+JOIN appleStore_description_combined b
+ON a.id = b.id
+WHERE  	b.app_desc LIKE '%Feature%' 
+		OR b.app_desc LIKE '%Usage%'
+        OR b.app_desc LIKE '%Hint%'
+        OR b.app_desc LIKE '%Tips%'
+
+```
+keywords could enhance app features and usage, leading to better user satisfaction and higher ratings.
+
+**6.Top Apps in Each Category **
+
+```sql
+
+-- Top Apps in each Category by user ratings if there is tie between 2 apps it's broken by total number of ratings 
+
+WITH cte_topranked_apps AS
+(
+    SELECT
+        prime_genre,
+        track_name,
+        user_rating,
+  		rating_count_tot,
+        RANK() OVER (PARTITION BY prime_genre ORDER BY user_rating DESC, rating_count_tot DESC) AS rank
+    FROM AppleStore
+)
+
+SELECT  prime_genre,
+        track_name,
+        user_rating,
+  		rating_count_tot
+FROM cte_topranked_apps
+WHERE rank = 1
+ORDER BY prime_genre, rating_count_tot DESC
+
+```
+If you are interested in all the top apps with substantial number of users. here I have taken this substantial number of users as 10000
+
+```sql
+
+WITH cte_topranked_apps AS
+(
+    SELECT
+        prime_genre,
+        track_name,
+        user_rating,
+  		rating_count_tot,
+        RANK() OVER (ORDER BY user_rating DESC) AS rank
+    FROM AppleStore
+  	WHERE rating_count_tot > 10000
+)
+
+SELECT *
+FROM cte_topranked_apps
+WHERE rank = 1
+ORDER BY prime_genre, rating_count_tot DESC
+
+```
+Considering the rating count filter, we can focus on apps that have been rated by a substantial number of users, ensuring that the top-ranked apps are genuinely popular and influential within their respective genres. This analysis provides valuable insights for app developers seeking to understand the most highly-rated apps in different genres and make informed decisions for app development strategies.
 
 ## Conclusion
 
