@@ -110,7 +110,7 @@ On conducting the analysis, we found that, on average, paid apps received slight
 -- Dividing languages into groups <10 , 10-30 , 31-50 , 51-100
 
 SELECT  CASE
-			WHEN lang_num < 10 THEN "< 10 Languages"
+  	    WHEN lang_num < 10 THEN "< 10 Languages"
             WHEN lang_num BETWEEN 10 AND 30 THEN "10-30 Languages" 
             WHEN lang_num BETWEEN 31 AND 50 THEN "31-50 Languages"
             WHEN lang_num BETWEEN 50 AND 100 THEN "50-100 Languages"
@@ -123,7 +123,7 @@ ORDER BY AvgRating DESC
 -- Here 10-30 Language group has more ratings .. if we want more info let's go into little depth
 
 SELECT CASE
-			WHEN lang_num BETWEEN 10 AND 15 THEN "10-15 Languages"
+ 	    WHEN lang_num BETWEEN 10 AND 15 THEN "10-15 Languages"
             WHEN lang_num BETWEEN 16 AND 20 THEN "16-20 Languages"
             WHEN lang_num BETWEEN 21 AND 25 THEN "21-25 Languages"
             WHEN lang_num BETWEEN 26 AND 30 THEN "26-30 Languages"
@@ -147,7 +147,7 @@ Through our data analysis, we observed a positive correlation between the number
 -- Check Genre with low rating
 
 SELECT prime_genre,
-		Avg(user_rating) as AvgRating
+Avg(user_rating) as AvgRating
 FROM AppleStore
 GROUP BY prime_genre
 ORDER BY AvgRating
@@ -165,7 +165,7 @@ Our analysis also identified genres with low ratings in the dataset. This findin
 -- Check if there is realation between app_description and user_rating
 
 SELECT  CASE
-			WHEN Length(b.app_desc) < 500 THEN "Short"
+	    WHEN Length(b.app_desc) < 500 THEN "Short"
             WHEN Length(b.app_desc) BETWEEN 500 AND 1000 THEN "Medium"
             ELSE "Long"
         END AS LangLenGroup,
@@ -211,7 +211,7 @@ WITH cte_topranked_apps AS
         prime_genre,
         track_name,
         user_rating,
-  		rating_count_tot,
+	rating_count_tot,
         RANK() OVER (PARTITION BY prime_genre ORDER BY user_rating DESC, rating_count_tot DESC) AS rank
     FROM AppleStore
 )
@@ -219,7 +219,7 @@ WITH cte_topranked_apps AS
 SELECT  prime_genre,
         track_name,
         user_rating,
-  		rating_count_tot
+	rating_count_tot
 FROM cte_topranked_apps
 WHERE rank = 1
 ORDER BY prime_genre, rating_count_tot DESC
@@ -235,10 +235,10 @@ WITH cte_topranked_apps AS
         prime_genre,
         track_name,
         user_rating,
-  		rating_count_tot,
+	rating_count_tot,
         RANK() OVER (ORDER BY user_rating DESC) AS rank
     FROM AppleStore
-  	WHERE rating_count_tot > 10000
+    WHERE rating_count_tot > 10000
 )
 
 SELECT *
@@ -249,9 +249,21 @@ ORDER BY prime_genre, rating_count_tot DESC
 ```
 Considering the rating count filter, we can focus on apps that have been rated by a substantial number of users, ensuring that the top-ranked apps are genuinely popular and influential within their respective genres. This analysis provides valuable insights for app developers seeking to understand the most highly-rated apps in different genres and make informed decisions for app development strategies.
 
-## Conclusion
+## Final Recommendations
 
-In conclusion, this project has demonstrated the power of data analytics with SQL in providing actionable insights for app development strategies. By analyzing the comprehensive dataset of apps available on the Apple Store, we have been able to offer valuable recommendations to our stakeholder. As an aspiring app developer, these insights can guide them in making informed decisions about app categories, pricing, language support, and app descriptions, ultimately leading to successful app development and enhanced user satisfaction.
+1. Paid Vs Free: In general, paid apps tend to have higher user ratings compared to free apps. To optimize ratings and pricing, consider analyzing different price ranges to find the sweet spot that resonates best with users.
+
+2. App Supporting more languages: Supporting 10-15 languages is sufficient, and focusing on the most relevant languages is key. Adding too many languages may not significantly impact user ratings.
+
+3. Categories like Catalogs, Finance & Books: These categories have lower average user ratings, presenting a valuable opportunity to create apps that address user needs and provide better satisfaction.
+
+4. Length of App Description: Apps with comprehensive descriptions, highlighting features, usage, hints, and tips, tend to receive higher ratings. Ensure app descriptions are informative and user-friendly.
+
+5. New Apps: Aim for an average rating above 3.5 to stand out and gain popularity in the competitive app market.
+
+6. Games and Entertainment: Entry into these genres is highly competitive due to the vast library of apps with great user ratings. However, if your app offers unique value and exceptional quality, it can succeed and achieve significant incentives due to high demand.
+
+Implementing these recommendations can enhance app development strategies and lead to greater user engagement, higher user satisfaction, and ultimately, increased success in the app market.
 
 I hope this project serves as a practical reference for both myself and others in the data community who are learning SQL and seeking real-world examples. If you have any questions or wish to collaborate on SQL-related projects, please feel free to reach out.
 
