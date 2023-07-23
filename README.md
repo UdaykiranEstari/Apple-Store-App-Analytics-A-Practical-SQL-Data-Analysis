@@ -256,3 +256,5 @@ In conclusion, this project has demonstrated the power of data analytics with SQ
 I hope this project serves as a practical reference for both myself and others in the data community who are learning SQL and seeking real-world examples. If you have any questions or wish to collaborate on SQL-related projects, please feel free to reach out.
 
 Thank you for joining me on this data analytics journey!
+
+Special thanks to [Lore So What](https://www.youtube.com/@loresowhat) for his insights and inspiration.
