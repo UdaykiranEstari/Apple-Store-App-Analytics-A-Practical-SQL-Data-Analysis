@@ -1,5 +1,5 @@
 
-# Practical Data Analytics with SQL
+# Practical Data Analytics with SQL: AppleStore App Analytics
 
 ## **Introduction**
 
