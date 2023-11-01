@@ -104,6 +104,8 @@ ORDER BY prime_genre;
 
 On conducting the analysis, we found that, on average, paid apps received slightly higher ratings compared to free apps. This suggests that users might perceive paid apps as having higher value and engagement, leading to better ratings. As a recommendation, our stakeholder could consider offering a paid app to potentially enhance user engagement and increase the perceived value of their app.
 
+In conlucsion Paid and free apps have 3.72, 3.38 avg_userrating respectively. Paid apps have 10% more avgrating compared to free apps.
+
 **2. Languages and Ratings**
 
 
@@ -141,6 +143,8 @@ ORDER BY AvgRating DESC
 
 
 Through our data analysis, we observed a positive correlation between the number of languages supported by an app and its user ratings. Apps that supported a moderate number of languages tended to have better average user ratings. This insight indicates that focusing on supporting the most relevant languages for the target audience can significantly improve user satisfaction and overall ratings.
+
+But as per conclusion 10-15 Language support is enough is good and allot time for other improvement instead of adding more language support
 
 **3. Low-Rated Genres**
 
